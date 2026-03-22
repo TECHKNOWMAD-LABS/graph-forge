@@ -1,0 +1,51 @@
+description: Technology knowledge domain covering software, hardware, and infrastructure.
+
+entity_types:
+  software:
+    description: Software product or library
+    properties:
+      - version
+      - language
+      - license
+  hardware:
+    description: Physical computing device or component
+    properties:
+      - manufacturer
+      - category
+  organization:
+    description: Company or open-source foundation
+    properties:
+      - founded
+      - headquarters
+  person:
+    description: Individual contributor or executive
+    properties:
+      - role
+      - affiliation
+  concept:
+    description: Abstract technical concept or paradigm
+    properties:
+      - domain
+
+relation_types:
+  developed_by:
+    description: Software/hardware developed by an organization or person
+    directed: true
+  depends_on:
+    description: Component depends on another
+    directed: true
+  implements:
+    description: Software implements a concept or standard
+    directed: true
+  competes_with:
+    description: Products compete in the same market
+    directed: false
+  founded_by:
+    description: Organization founded by a person
+    directed: true
+  co_occurs_with:
+    description: Entities appear together in context
+    directed: false
+  related_to:
+    description: General relationship
+    directed: false

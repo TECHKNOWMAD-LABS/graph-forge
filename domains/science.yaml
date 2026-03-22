@@ -1,0 +1,51 @@
+description: Scientific research domain covering fields, researchers, institutions, and publications.
+
+entity_types:
+  researcher:
+    description: Individual scientist or academic
+    properties:
+      - institution
+      - field
+      - h_index
+  institution:
+    description: University, lab, or research institute
+    properties:
+      - country
+      - type
+  publication:
+    description: Research paper, preprint, or book
+    properties:
+      - year
+      - doi
+      - venue
+  field:
+    description: Scientific discipline or sub-field
+    properties:
+      - parent_field
+  concept:
+    description: Scientific concept, method, or theory
+    properties:
+      - field
+
+relation_types:
+  authored_by:
+    description: Publication authored by researcher
+    directed: true
+  affiliated_with:
+    description: Researcher affiliated with institution
+    directed: true
+  cites:
+    description: Publication cites another publication
+    directed: true
+  studies:
+    description: Researcher studies a field or concept
+    directed: true
+  part_of:
+    description: Field is a sub-field of another
+    directed: true
+  co_occurs_with:
+    description: Entities appear together in context
+    directed: false
+  related_to:
+    description: General relationship
+    directed: false

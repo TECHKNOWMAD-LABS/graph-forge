@@ -1,0 +1,43 @@
+description: Social network domain covering people, groups, topics, and interactions.
+
+entity_types:
+  person:
+    description: Individual in the social network
+    properties:
+      - username
+      - location
+      - verified
+  group:
+    description: Community, organisation, or team
+    properties:
+      - size
+      - category
+  topic:
+    description: Subject of discussion or interest
+    properties:
+      - category
+  event:
+    description: Temporal social occurrence
+    properties:
+      - date
+      - location
+
+relation_types:
+  follows:
+    description: Person follows another person or topic
+    directed: true
+  member_of:
+    description: Person is a member of a group
+    directed: true
+  mentions:
+    description: Person mentions another person or topic
+    directed: true
+  attends:
+    description: Person attends an event
+    directed: true
+  co_occurs_with:
+    description: Entities co-occur in a social context
+    directed: false
+  related_to:
+    description: General relationship
+    directed: false

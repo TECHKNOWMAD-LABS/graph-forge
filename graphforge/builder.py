@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from functools import lru_cache
 from typing import Any
 
 import networkx as nx
@@ -14,6 +15,8 @@ class GraphBuilder:
 
     def __init__(self) -> None:
         self._graph: nx.DiGraph = nx.DiGraph()
+        # Cache invalidation counter — bumped on every structural change
+        self._version: int = 0
 
     # ------------------------------------------------------------------
     # Properties
@@ -53,6 +56,7 @@ class GraphBuilder:
             entity_type=entity.entity_type,
             **entity.properties,
         )
+        self._version += 1
 
     def add_entities(self, entities: list[Entity] | None) -> None:
         """Add multiple entities. None or empty list is a no-op."""
@@ -79,6 +83,7 @@ class GraphBuilder:
             weight=rel.weight,
             **rel.properties,
         )
+        self._version += 1
 
     def add_relationships(self, relationships: list[Relationship] | None) -> None:
         """Add multiple relationships. None or empty list is a no-op."""
@@ -152,6 +157,7 @@ class GraphBuilder:
 
     def clear(self) -> None:
         self._graph.clear()
+        self._version += 1
 
     # ------------------------------------------------------------------
     # Serialisation

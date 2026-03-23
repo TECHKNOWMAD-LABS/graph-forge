@@ -57,8 +57,30 @@ class DomainLoader:
         return self._dir
 
     def load(self, domain_name: str) -> DomainConfig:
-        """Load a single domain by name (looks for <name>.yaml)."""
+        """Load a single domain by name (looks for <name>.yaml).
+
+        Args:
+            domain_name: Domain stem name (no path separators or extensions).
+
+        Raises:
+            ValueError: If domain_name contains path separators (CWE-22 prevention).
+            FileNotFoundError: If the YAML file does not exist.
+        """
+        # CWE-22: prevent path traversal via domain_name
+        if not domain_name or "/" in domain_name or "\\" in domain_name or ".." in domain_name:
+            raise ValueError(
+                f"Invalid domain name {domain_name!r}: must not contain path separators"
+            )
         path = self._dir / f"{domain_name}.yaml"
+        # Resolve and verify the path stays within the domains directory
+        try:
+            resolved = path.resolve()
+            base_resolved = self._dir.resolve()
+            resolved.relative_to(base_resolved)
+        except ValueError:
+            raise ValueError(
+                f"Domain path {path} escapes the domains directory (path traversal blocked)"
+            )
         if not path.exists():
             raise FileNotFoundError(f"Domain config not found: {path}")
         with path.open() as fh:

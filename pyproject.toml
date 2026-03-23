@@ -6,7 +6,18 @@ build-backend = "hatchling.build"
 name = "graphforge"
 version = "0.1.0"
 description = "Knowledge graph builder with extractor, builder, and enricher components"
+authors = [{ name = "TechKnowMad Labs", email = "admin@techknowmad.ai" }]
 license = { text = "MIT" }
+readme = "README.md"
+keywords = ["knowledge-graph", "graph", "nlp", "networkx", "extraction"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 requires-python = ">=3.12"
 dependencies = [
     "networkx>=3.3",

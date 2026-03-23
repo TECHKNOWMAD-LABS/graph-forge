@@ -67,7 +67,7 @@ class GraphExtractor:
                     properties={
                         k: v
                         for k, v in rec.items()
-                        if k not in {"source", "target", "relation"}
+                        if k not in {"source", "target", "relation", "weight"}
                     },
                     weight=float(rec.get("weight", 1.0)),
                 )

@@ -28,10 +28,12 @@ class GraphBuilder:
 
     @property
     def node_count(self) -> int:
+        """Number of nodes currently in the graph."""
         return self._graph.number_of_nodes()
 
     @property
     def edge_count(self) -> int:
+        """Number of directed edges currently in the graph."""
         return self._graph.number_of_edges()
 
     # ------------------------------------------------------------------
@@ -58,7 +60,11 @@ class GraphBuilder:
         self._version += 1
 
     def add_entities(self, entities: list[Entity] | None) -> None:
-        """Add multiple entities. None or empty list is a no-op."""
+        """Add multiple entities to the graph.
+
+        Args:
+            entities: List of Entity objects to add. None or empty list is a no-op.
+        """
         if not entities:
             return
         for entity in entities:
@@ -85,7 +91,11 @@ class GraphBuilder:
         self._version += 1
 
     def add_relationships(self, relationships: list[Relationship] | None) -> None:
-        """Add multiple relationships. None or empty list is a no-op."""
+        """Add multiple relationships to the graph.
+
+        Args:
+            relationships: List of Relationship objects. None or empty list is a no-op.
+        """
         if not relationships:
             return
         for rel in relationships:
@@ -152,9 +162,11 @@ class GraphBuilder:
         return self._graph.subgraph(node_ids).copy()
 
     def degree_centrality(self) -> dict[str, float]:
+        """Compute and return degree centrality for all nodes."""
         return nx.degree_centrality(self._graph)
 
     def clear(self) -> None:
+        """Remove all nodes and edges from the graph."""
         self._graph.clear()
         self._version += 1
 
@@ -168,6 +180,14 @@ class GraphBuilder:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> GraphBuilder:
+        """Restore a GraphBuilder from a serialised dict (produced by to_dict).
+
+        Args:
+            data: Dict as returned by ``to_dict()``.
+
+        Returns:
+            New GraphBuilder with the graph restored.
+        """
         builder = cls()
         builder._graph = nx.node_link_graph(data, directed=True, edges="links")
         return builder

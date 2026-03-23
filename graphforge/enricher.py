@@ -24,20 +24,30 @@ class GraphEnricher:
     # Node enrichment
     # ------------------------------------------------------------------
 
-    def add_node_property(self, node_id: str, key: str, value: Any) -> bool:
-        """Set a single property on a node.  Returns False if node not found."""
-        if node_id not in self.graph:
+    def add_node_property(self, node_id: str | None, key: str, value: Any) -> bool:
+        """Set a single property on a node.  Returns False if node not found.
+
+        Args:
+            node_id: Node identifier. None or missing node returns False.
+            key: Property key to set.
+            value: Property value to set.
+        """
+        if not node_id or node_id not in self.graph:
             return False
+        if not key:
+            raise ValueError("Property key must be a non-empty string")
         self.graph.nodes[node_id][key] = value
         return True
 
     def bulk_enrich_nodes(
-        self, enrichments: dict[str, dict[str, Any]]
+        self, enrichments: dict[str, dict[str, Any]] | None
     ) -> list[str]:
         """Apply multiple property dicts keyed by node_id.
 
         Returns list of node_ids that were not found.
         """
+        if not enrichments:
+            return []
         missing: list[str] = []
         for node_id, props in enrichments.items():
             if node_id not in self.graph:

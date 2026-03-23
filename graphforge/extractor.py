@@ -7,6 +7,10 @@ from typing import Any
 
 from graphforge.models import Entity, Relationship
 
+# Maximum allowed string length to guard against extremely large inputs
+_MAX_TEXT_LENGTH = 1_000_000
+_MAX_RECORDS = 100_000
+
 
 class GraphExtractor:
     """Extract entities and relationships from various data sources."""
@@ -25,18 +29,36 @@ class GraphExtractor:
     # ------------------------------------------------------------------
 
     def from_dict(
-        self, records: list[dict[str, Any]]
+        self, records: list[dict[str, Any]] | None
     ) -> tuple[list[Entity], list[Relationship]]:
         """Extract entities and relationships from a list of record dicts.
 
         Each record may contain:
           - id, label, type → becomes an Entity
           - source, target, relation → becomes a Relationship
+
+        Args:
+            records: List of record dicts. None or empty list returns empty output.
+
+        Raises:
+            TypeError: If records is not a list (after None check).
+            ValueError: If the list exceeds _MAX_RECORDS entries.
         """
+        if records is None:
+            return [], []
+        if not isinstance(records, list):
+            raise TypeError(f"records must be a list, got {type(records).__name__}")
+        if len(records) > _MAX_RECORDS:
+            raise ValueError(
+                f"records list too large: {len(records)} entries (max {_MAX_RECORDS})"
+            )
+
         entities: list[Entity] = []
         relationships: list[Relationship] = []
 
         for rec in records:
+            if not isinstance(rec, dict):
+                continue  # skip non-dict entries gracefully
             if "source" in rec and "target" in rec:
                 rel = Relationship(
                     source_id=str(rec["source"]),
@@ -64,18 +86,34 @@ class GraphExtractor:
         return entities, relationships
 
     def from_text(
-        self, text: str, entity_patterns: dict[str, str] | None = None
+        self, text: str | None, entity_patterns: dict[str, str] | None = None
     ) -> tuple[list[Entity], list[Relationship]]:
         """Extract entities from free text using regex patterns.
 
         Args:
-            text: Input text to process.
+            text: Input text to process. None or empty string returns empty output.
             entity_patterns: Mapping of entity_type → regex pattern.
 
         Returns:
             Tuple of (entities, relationships).  Relationships extracted from
             "X [relation] Y" constructs where known relation types appear.
+
+        Raises:
+            TypeError: If text is not a string (after None check).
+            ValueError: If text exceeds _MAX_TEXT_LENGTH characters.
         """
+        if text is None:
+            return [], []
+        if not isinstance(text, (str, bytes)):
+            raise TypeError(f"text must be a string, got {type(text).__name__}")
+        if isinstance(text, bytes):
+            text = text.decode("utf-8", errors="replace")
+        if len(text) > _MAX_TEXT_LENGTH:
+            raise ValueError(
+                f"text too large: {len(text)} chars (max {_MAX_TEXT_LENGTH})"
+            )
+        if not text.strip():
+            return [], []
         patterns = entity_patterns or {}
         entities: list[Entity] = []
         seen_ids: set[str] = set()
@@ -94,9 +132,18 @@ class GraphExtractor:
         return entities, relationships
 
     def validate(
-        self, entities: list[Entity], relationships: list[Relationship]
+        self,
+        entities: list[Entity] | None,
+        relationships: list[Relationship] | None,
     ) -> list[str]:
-        """Return a list of validation error strings (empty means valid)."""
+        """Return a list of validation error strings (empty means valid).
+
+        Args:
+            entities: List of Entity objects. None treated as empty list.
+            relationships: List of Relationship objects. None treated as empty list.
+        """
+        entities = entities or []
+        relationships = relationships or []
         errors: list[str] = []
         entity_ids = {e.id for e in entities}
 

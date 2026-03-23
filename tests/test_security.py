@@ -5,7 +5,6 @@ Checks: path traversal, injection guards, no hardcoded secrets.
 
 from __future__ import annotations
 
-import os
 import re
 from pathlib import Path
 
@@ -13,7 +12,6 @@ import pytest
 
 from graphforge.domains import DomainLoader
 from graphforge.extractor import GraphExtractor
-
 
 # ---------------------------------------------------------------------------
 # Security scan: no hardcoded secrets in source files
@@ -59,7 +57,7 @@ class TestNoHardcodedSecrets:
         for src in _SOURCE_FILES:
             all_findings.extend(_scan_file(src))
         assert all_findings == [], (
-            f"Potential secrets found:\n" + "\n".join(all_findings)
+            "Potential secrets found:\n" + "\n".join(all_findings)
         )
 
 

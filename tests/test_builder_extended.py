@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-import pytest
-
 from graphforge.builder import GraphBuilder
-from graphforge.models import Entity, Relationship
 from tests.conftest import make_entity, make_relationship
 
 

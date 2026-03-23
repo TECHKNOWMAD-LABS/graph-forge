@@ -15,9 +15,7 @@ import pytest
 
 from graphforge.async_builder import build_graph_parallel, enrich_nodes_parallel
 from graphforge.builder import GraphBuilder
-from graphforge.models import Entity, Relationship
 from tests.conftest import make_entity, make_relationship
-
 
 # ---------------------------------------------------------------------------
 # Helpers

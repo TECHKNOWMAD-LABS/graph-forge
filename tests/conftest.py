@@ -9,7 +9,6 @@ from graphforge.enricher import GraphEnricher
 from graphforge.extractor import GraphExtractor
 from graphforge.models import Entity, Relationship
 
-
 # ---------------------------------------------------------------------------
 # Entity / Relationship factories
 # ---------------------------------------------------------------------------

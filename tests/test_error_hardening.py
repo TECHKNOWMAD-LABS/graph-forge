@@ -7,9 +7,7 @@ import pytest
 from graphforge.builder import GraphBuilder
 from graphforge.enricher import GraphEnricher
 from graphforge.extractor import GraphExtractor
-from graphforge.models import Entity, Relationship
-from tests.conftest import make_entity, make_relationship
-
+from tests.conftest import make_entity
 
 # ---------------------------------------------------------------------------
 # GraphExtractor — empty / None / malformed inputs

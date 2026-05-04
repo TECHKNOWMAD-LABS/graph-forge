@@ -1,0 +1,14 @@
+# CODEOWNERS — TechKnowmad Labs
+# Last updated: 2026-05-04
+
+* @Techknowmadlabs
+
+/.github/ @Techknowmadlabs
+*.yml @Techknowmadlabs
+*.yaml @Techknowmadlabs
+
+SECURITY.md @Techknowmadlabs
+.gitignore @Techknowmadlabs
+pyproject.toml @Techknowmadlabs
+package.json @Techknowmadlabs
+Dockerfile @Techknowmadlabs
